@@ -1,5 +1,7 @@
 <template>
   <div class="top-card-container">
+    <NuxtImg class="background-image" src="/background-image.png" />
+
     <div class="content-container">
       <div class="presentation">
         <span>Hi, my name is</span>
@@ -68,13 +70,16 @@
   .top-card-container {
     position: relative;
     height: 100vh;
-    background-image: url('../assets/images/background-image.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-color: rgb(161, 161, 161);
-    background-blend-mode: multiply;
     display: flex;
     flex-direction: column;
+
+    .background-image {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      z-index: -1;
+      filter: brightness(0.8);
+    }
 
     .content-container {
       display: flex;
