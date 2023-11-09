@@ -2,7 +2,7 @@
   <div class="top-card-container">
     <NuxtImg class="background-image" src="/background-image.png" />
 
-    <div class="content-container">
+    <div class="content-container" id="contentContainer">
       <div class="presentation">
         <span>Hi, my name is</span>
         <span class="highlight-text">Matheus</span>
