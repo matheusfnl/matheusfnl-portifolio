@@ -48,13 +48,102 @@
     </div>
 
     <div class="bottom-content-indicator">
-      <div clas="arrow-down-button">
+      <div class="arrow-down-button" @click="scrolToContent">
         <ArrowUpIcon />
       </div>
     </div>
   </div>
 
-  <div class="section-container">
+  <div class="section-container" id="contentSection">
+    <div class="section-column c-60">
+      <span class="title color-1">
+        <div>
+          <span class="indicator">></span>
+          Projects
+        </div>
+
+        <div class="buttons-area">
+          <button class="full-button primary">
+            See all
+          </button>
+
+          <button class="light-button primary" @click="openLink('https://github.com/matheusfnl')">
+            View GitHub
+          </button>
+        </div>
+      </span>
+
+      <div class="section-content">
+        <!--  -->
+      </div>
+    </div>
+
+    <div class="section-column c-40">
+      <span class="title color-2">
+        <div>
+          <span class="indicator">></span>
+          Contact
+        </div>
+
+        <div class="buttons-area">
+          <button class="full-button secondary">
+            Get in touch
+          </button>
+        </div>
+      </span>
+
+      <div class="section-content contact-container">
+        <div class="buttons-container">
+          <div class="social-media-button" @click="openLink('https://github.com/matheusfnl')">
+            <div class="icon">
+              <GitHubIcon />
+            </div>
+
+            <div class="content">
+              <div class="button-title">
+                GitHub
+              </div>
+
+              <div class="subtitle">
+                matheusfnl
+              </div>
+            </div>
+          </div>
+
+          <div class="social-media-button" @click="openLink('https://www.linkedin.com/in/matheusgabrielgco/')">
+            <div class="icon">
+              <LinkedinIcon />
+            </div>
+
+            <div class="content">
+              <div class="button-title">
+                Linkedin
+              </div>
+
+              <div class="subtitle">
+                matheusgabrielgco
+              </div>
+            </div>
+          </div>
+
+          <div class="social-media-button" @click="openLink('https://www.instagram.com/matheus.funxl/')">
+            <div class="icon">
+              <GitHubIcon />
+            </div>
+
+            <div class="content">
+              <div class="button-title">
+                Instagram
+              </div>
+
+              <div class="subtitle">
+                matheus.funxl
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -64,6 +153,10 @@
   import ArrowUpIcon from '../components/icons/ArrowUpIcon.vue';
 
   const openLink = (link) => window.open(link, '_blank');
+  const scrolToContent = () => {
+    const position = document.getElementById('contentSection').offsetTop;
+    window.scrollTo({ top: position - 16, behavior: "smooth" });
+  }
 </script>
 
 <style lang="scss" scoped>
@@ -212,12 +305,178 @@
       height: 48px;
       color: var(--text-card-color);;
       animation: updown 1.2s ease-in-out infinite;
+      z-index: 1;
+
+      .arrow-down-button { cursor: pointer; }
     }
   }
 
   .section-container {
     height: 100vh;
-    background-color: white;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 8px 16px;
+    margin-top: 24px;
+
+    display: flex;
+    gap: 8px;
+
+    .section-column {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+
+      .title {
+        font-size: 2rem;
+        font-weight: 600;
+
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        flex-direction: column;
+
+        &.color-1 { color: var(--primary-color) }
+        &.color-2 { color: var(--secondary-color) }
+        .indicator { font-weight: bold; }
+        .buttons-area {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+
+          .full-button {
+            cursor: pointer;
+            background-color: black;
+            color: var(--text-color);
+            border: 1px solid black;
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all .1s;
+
+            &.primary {
+              background-color: var(--primary-color);
+              color: var(--text-color);
+              border: 1px solid var(--primary-color);
+
+              &:hover {
+                transform: scale(1.06) rotate(1deg);
+              }
+            }
+
+            &.secondary {
+              background-color: var(--secondary-color);
+              color: var(--text-color);
+              border: 1px solid var(--secondary-color);
+
+              &:hover {
+                transform: scale(1.06) rotate(1deg);
+              }
+            }
+          }
+
+          .light-button {
+            cursor: pointer;
+            background-color: white;
+            color: black;
+            border: 1px solid black;
+            border-radius: 4px;
+            padding: 2px 4px;
+            font-weight: 400;
+            font-size: 1rem;
+            transition: all .1s;
+
+            &.primary {
+              background-color: transparent;
+              color: var(--primary-color);
+              border: 1px solid var(--primary-color);
+
+              &:hover {
+                background-color: var(--primary-color);
+                color: var(--text-color);
+                border: 1px solid var(--primary-color);
+                transform: scale(1.06) rotate(1deg);
+              }
+            }
+
+            &.secondary {
+              background-color: transparent;
+              color: var(--secondary-color);
+              border: 1px solid var(--secondary-color);
+
+              &:hover {
+                background-color: var(--secondary-color);
+                color: var(--text-color);
+                border: 1px solid var(--secondary-color);
+                transform: scale(1.06) rotate(1deg);
+              }
+            }
+          }
+        }
+      }
+
+      .contact-container {
+        .buttons-container {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+
+          .social-media-button {
+            flex: 1;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.23);
+            padding: 8px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 6px;
+
+            display: flex;
+            gap: 8px;
+            align-items: center;
+
+            .icon {
+              margin-top: 2px;
+              transition: all .1s;
+              width: 32px;
+            }
+
+            .content {
+              display: flex;
+              flex-direction: column;
+              line-height: 16px;
+
+              .button-title {
+                font-size: 18px;
+                font-weight: 600;
+                transition: all .1s;
+              }
+
+              .subtitle {
+                font-weight: 300;
+              }
+            }
+
+            &:hover {
+              .icon {
+                color: var(--secondary-color);
+                transform: scale(1.2);
+              }
+
+              .content {
+                .button-title {
+                  color: var(--secondary-color);
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .c {
+      &-40 {width: 40%; max-width: 40% }
+      &-60 { width: 60%; max-width: 60% }
+    }
   }
 
   @keyframes updown {

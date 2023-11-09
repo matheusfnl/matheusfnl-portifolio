@@ -1,18 +1,6 @@
 <template>
-  <div class="header-container" ref="header">
+  <div class="header-container" ref="header" :class="{ 'expand-header' : should_expand_header }">
     <div class="header-content">
-      <div class="buttons-area" v-if="shouldShowButtons">
-        <button class="custon-button" @click="openLink('https://github.com/matheusfnl')">
-          <GitHubIcon class="icon" />
-          github
-        </button>
-
-        <button class="custon-button" @click="openLink('https://www.linkedin.com/in/matheusgabrielgco/')">
-          <LinkedinIcon />
-          linkedin
-        </button>
-      </div>
-
       <div class="theme-button">
         <button @click="changeTheme">
           <BulbIcon class="icon" v-if="! dark_theme" />
@@ -24,22 +12,35 @@
 </template>
 
 <script setup>
-  import { ref, computed } from 'vue';
+  import { ref, onMounted } from 'vue';
 
   import BulbIcon from './icons/BulbIcon.vue';
   import BulbOffIcon from './icons/BulbOffIcon.vue';
-  import GitHubIcon from './icons/GitHubIcon.vue';
-  import LinkedinIcon from './icons/LinkedinIcon.vue';
 
+  const should_expand_header = ref(false);
   const dark_theme = ref(false);
   const header = ref(null);
-  const changeTheme = () => dark_theme.value = ! dark_theme.value;
+  const changeTheme = () => {
+    dark_theme.value = ! dark_theme.value;
+    dark_theme.value ? document.body.className ='dark-theme' : document.body.className = '';
+  };
 
-  const shouldShowButtons = computed(() => {
-    return true;
-  });
+  onMounted(() => {
+    document.addEventListener('scroll', () => {
+      const dom_content = document.getElementById('contentSection');
 
-  const openLink = (link) => window.open(link, '_blank');
+      if (dom_content) {
+        const top_position = dom_content.getBoundingClientRect().top
+
+        if (top_position < 35) {
+          return should_expand_header.value = true;
+        }
+      }
+
+      should_expand_header.value = false;
+    })
+  })
+
 </script>
 
 <style lang="scss" scoped>
@@ -47,6 +48,16 @@
     width: 100%;
     position: fixed;
     z-index: 1;
+
+    &.expand-header {
+      .header-content {
+        .theme-button {
+          button {
+            color: var(--text-color) !important;
+          }
+        }
+      }
+    }
 
     .header-content {
       width: 100%;
@@ -74,36 +85,6 @@
 
           &:hover, &:focus {
             transform: scale(1.15)
-          }
-        }
-      }
-    }
-
-    .buttons-area {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-
-      button {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: transparent;
-        gap: 4px;
-        border: 0;
-        outline: 0;
-        color: var(--text-card-color);
-        font-size: 14px;
-
-        .icon {
-          transition: all .2s;
-        }
-
-        &:hover, &:focus {
-          .icon {
-            color: var(--primary-color)
           }
         }
       }

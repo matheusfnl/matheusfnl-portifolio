@@ -7,9 +7,21 @@
   font-family: 'Ysabeau Infant', sans-serif;
 }
 
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: all .2s;
+}
+
 :root {
   --text-card-color: white;
-  --text-color: black;
-  --background-color: white;
+  --text-color: #413628;
+  --background-color: #fffaeb;
   --primary-color: #9c9c6e;
+  --secondary-color: #c89863;
+}
+
+.dark-theme {
+  --text-color: #fffaeb;
+  --background-color: #0f0d0a;
 }
