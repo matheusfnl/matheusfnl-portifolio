@@ -1,6 +1,6 @@
 <template>
   <div class="top-card-container">
-    <NuxtImg class="background-image" src="/background-image.png" />
+    <NuxtImg format="webp" class="background-image" src="/background-image.png" />
 
     <div class="content-container" id="contentContainer">
       <div class="presentation">
@@ -77,6 +77,7 @@
       position: absolute;
       height: 100%;
       width: 100%;
+      object-fit: cover;
       z-index: -1;
       filter: brightness(0.8);
     }
