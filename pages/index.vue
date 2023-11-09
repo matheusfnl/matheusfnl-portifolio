@@ -479,6 +479,17 @@
     }
   }
 
+  @media (max-width: 780px) {
+    .section-container {
+      flex-direction: column;
+
+      .c {
+        &-40 { width: 100%; max-width: 100%; }
+        &-60 { width: 100%; max-width: 100%; }
+      }
+    }
+  }
+
   @keyframes updown {
     0%, 100% { transform: translateY(0) rotate(180deg); }
     50% { transform: translateY(-10px) rotate(180deg); }
