@@ -74,7 +74,32 @@
       </span>
 
       <div class="section-content">
-        <!--  -->
+        <div class="projects-container">
+          <div class="project-container" :key="index" v-for="(repo, index) in repos.data" @click="openLink(repo.html_url)">
+            <div class="project-info-container">
+              <div class="project-title">
+                <span>
+                  {{ repo.name }}
+                </span>
+
+                <button class="link-button" @click.stop="openHomePage(repo.homepage)" v-if="repo.homepage">
+                  View demo
+                </button>
+              </div>
+
+              <div class="project-description">
+                {{ repo.description }}
+              </div>
+            </div>
+
+            <div class="tags-container" v-if="repo.language">
+              <span :style="getTagColor(repo.language)">
+                {{ repo.language }}
+              </span>
+            </div>
+            <div class="custom-hr" />
+          </div>
+        </div>
       </div>
     </div>
 
@@ -92,7 +117,7 @@
         </div>
       </span>
 
-      <div class="section-content contact-container">
+      <div class="contact-container">
         <div class="buttons-container">
           <div class="social-media-button" @click="openLink('https://github.com/matheusfnl')">
             <div class="icon">
@@ -148,15 +173,42 @@
 </template>
 
 <script setup>
+  import { onMounted, ref } from 'vue';
+
   import GitHubIcon from '../components/icons/GitHubIcon.vue';
   import LinkedinIcon from '../components/icons/LinkedinIcon.vue';
   import ArrowUpIcon from '../components/icons/ArrowUpIcon.vue';
 
+  import fetchApi from '../helper/fetchApi.js';
+  import tagColor from '../enums/tagColors.js'
+
   const openLink = (link) => window.open(link, '_blank');
+
   const scrolToContent = () => {
     const position = document.getElementById('contentSection').offsetTop;
     window.scrollTo({ top: position - 16, behavior: "smooth" });
   }
+
+  const repos = ref([]);
+  const repos_error = ref(false);
+  const getRepos = async () => {
+    repos.value = await fetchApi({
+      url: 'users/matheusfnl/repos',
+      handleError: () => repos_error.value = true,
+      params: {
+        sort: 'created',
+        per_page: 10,
+      }
+    })
+  }
+
+  const openHomePage = (link) => {
+    openLink(link);
+  }
+
+  const getTagColor = (language) => ({ backgroundColor: tagColor[language] })
+
+  onMounted(() => getRepos())
 </script>
 
 <style lang="scss" scoped>
@@ -319,7 +371,7 @@
     margin-top: 24px;
 
     display: flex;
-    gap: 8px;
+    gap: 32px;
 
     .section-column {
       flex: 1;
@@ -425,9 +477,8 @@
           .social-media-button {
             flex: 1;
             cursor: pointer;
-            background-color: rgba(255, 255, 255, 0.23);
             padding: 8px;
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            background: color-mix(in srgb, currentColor 10%, transparent);
             border-radius: 6px;
 
             display: flex;
@@ -471,6 +522,93 @@
           }
         }
       }
+
+      .projects-container {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        .project-container {
+          width: 100%;
+          padding: 0 8px;
+          cursor: pointer;
+          transition: all .2s;
+
+          .project-info-container {
+            display: flex;
+            flex-direction: column;
+
+            .project-title {
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+
+              span {
+                font-size: 20px;
+                font-weight: 600;
+                transition: all .2s;
+              }
+
+              .link-button {
+                cursor: pointer;
+                border: 0;
+                outline: 0;
+                background-color: transparent;
+                color: var(--primary-color);
+                font-weight: 600;
+
+                &:hover {
+                  text-decoration: underline;
+                }
+              }
+            }
+
+            .project-description {
+              font-weight: 300;
+              padding: 0 8px;
+              opacity: 0.8;
+            }
+          }
+
+          .tags-container {
+            margin-top: 4px;
+            display: flex;
+            gap: 4px;
+
+            span {
+              font-size: .85rem;
+              font-weight: 700;
+              width: fit-content;
+              padding: 0 0.2rem 0.1rem 0.2rem;
+              border-radius: 4px;
+              display: flex;
+              gap: .25rem;
+              background: #9c948c;
+              color: var(--background-color);
+            }
+          }
+
+          .custom-hr {
+            height: 1px;
+            width: 100%;
+            margin-top: 16px;
+            background-color: var(--highlight-color);
+            opacity: .15;
+          }
+
+          &:hover {
+            margin-left: 8px;
+
+            .project-info-container {
+              .project-title {
+                span {
+                  color: var(--primary-color);
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     .c {
@@ -482,6 +620,7 @@
   @media (max-width: 780px) {
     .section-container {
       flex-direction: column;
+      gap: 8px;
 
       .c {
         &-40 { width: 100%; max-width: 100%; }

@@ -66,7 +66,7 @@
       justify-content: flex-end;
       gap: 16px;
       padding: 8px;
-      max-width: 1440px;
+      max-width: 1540px;
       margin: 0 auto;
 
       .theme-button {
