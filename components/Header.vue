@@ -3,8 +3,8 @@
     <div class="header-content">
       <div class="theme-button">
         <button @click="changeTheme">
-          <BulbIcon class="icon" v-if="! dark_theme" />
-          <BulbOffIcon v-else />
+          <IconBulb class="icon" v-if="! dark_theme" />
+          <IconBulbOff v-else />
         </button>
       </div>
     </div>
@@ -13,9 +13,6 @@
 
 <script setup>
   import { ref, onMounted } from 'vue';
-
-  import BulbIcon from './icons/BulbIcon.vue';
-  import BulbOffIcon from './icons/BulbOffIcon.vue';
 
   const should_expand_header = ref(false);
   const dark_theme = ref(false);

@@ -18,6 +18,7 @@
             a
           </span>
         </div>
+
         <span class="main-text">
           <span>
             WEB
@@ -30,7 +31,7 @@
 
       <div class="main-buttons-area">
         <button @click="openLink('https://github.com/matheusfnl')">
-          <div class="icon-wrapper"><GitHubIcon /></div>
+          <div class="icon-wrapper"><IconGitHub /></div>
           <div class="content-wrapper">
             <div class="indicator">></div>
             <span>github</span>
@@ -38,7 +39,7 @@
         </button>
 
         <button @click="openLink('https://www.linkedin.com/in/matheusgabrielgco/')">
-          <div class="icon-wrapper"><LinkedinIcon /></div>
+          <div class="icon-wrapper"><IconLinkedin /></div>
           <div class="content-wrapper">
             <div class="indicator">></div>
             <span>linkedin</span>
@@ -49,7 +50,7 @@
 
     <div class="bottom-content-indicator">
       <div class="arrow-down-button" @click="scrolToContent">
-        <ArrowUpIcon />
+        <IconArrowUp />
       </div>
     </div>
   </div>
@@ -75,7 +76,19 @@
 
       <div class="section-content">
         <div class="projects-container">
-          <div class="project-container" :key="index" v-for="(repo, index) in repos.data" @click="openLink(repo.html_url)">
+          <div class="repo-feedback-container" v-if="! repos_error && ! repos.data">
+            <SharedLoader />
+            Fetching repositories
+          </div>
+
+          <div class="repo-feedback-container" v-else-if="repos_error">
+            An unexpected error occurred
+            <button class="full-button primary" @click="getRepos">
+              Try again
+            </button>
+          </div>
+
+          <div v-else class="project-container" :key="index" v-for="(repo, index) in repos.data" @click="openLink(repo.html_url)">
             <div class="project-info-container">
               <div class="project-title">
                 <span>
@@ -121,7 +134,7 @@
         <div class="buttons-container">
           <div class="social-media-button" @click="openLink('https://github.com/matheusfnl')">
             <div class="icon">
-              <GitHubIcon />
+              <IconGitHub />
             </div>
 
             <div class="content">
@@ -137,7 +150,7 @@
 
           <div class="social-media-button" @click="openLink('https://www.linkedin.com/in/matheusgabrielgco/')">
             <div class="icon">
-              <LinkedinIcon />
+              <IconLinkedin />
             </div>
 
             <div class="content">
@@ -153,7 +166,7 @@
 
           <div class="social-media-button" @click="openLink('https://www.instagram.com/matheus.funxl/')">
             <div class="icon">
-              <GitHubIcon />
+              <IconInstagram />
             </div>
 
             <div class="content">
@@ -167,6 +180,45 @@
             </div>
           </div>
         </div>
+
+        <div class="send-message-container">
+          <span class="send-message-title">
+            <div>
+              <span class="indicator">></span>
+              Send message
+            </div>
+          </span>
+
+          <div class="form-container">
+            <form
+              action="https://formspree.io/f/mleykrzd"
+              method="POST"
+            >
+              <div class="inputs-container">
+                <div class="custom-input">
+                  <span>Name</span>
+                  <input name="name" required class="custom-input-style" type="text" />
+                </div>
+
+                <div class="custom-input">
+                  <span>E-mail</span>
+                  <input name="email" required class="custom-input-style" type="text" />
+                </div>
+
+                <div class="custom-input">
+                  <span>Message</span>
+                  <textarea name="message" required class="custom-input-style" type="text" />
+                </div>
+              </div>
+
+              <div>
+                <button type="submit" class="full-button primary submit-button">
+                  Send
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -174,10 +226,6 @@
 
 <script setup>
   import { onMounted, ref } from 'vue';
-
-  import GitHubIcon from '../components/icons/GitHubIcon.vue';
-  import LinkedinIcon from '../components/icons/LinkedinIcon.vue';
-  import ArrowUpIcon from '../components/icons/ArrowUpIcon.vue';
 
   import fetchApi from '../helper/fetchApi.js';
   import tagColor from '../enums/tagColors.js'
@@ -192,6 +240,8 @@
   const repos = ref([]);
   const repos_error = ref(false);
   const getRepos = async () => {
+    repos_error.value = false;
+
     repos.value = await fetchApi({
       url: 'users/matheusfnl/repos',
       handleError: () => repos_error.value = true,
@@ -219,6 +269,7 @@
     flex-direction: column;
 
     .background-image {
+      background-color: var(--primary-color);
       position: absolute;
       height: 100%;
       width: 100%;
@@ -364,7 +415,6 @@
   }
 
   .section-container {
-    height: 100vh;
     max-width: 1440px;
     margin: 0 auto;
     padding: 8px 16px;
@@ -372,6 +422,8 @@
 
     display: flex;
     gap: 32px;
+
+    &:last-child { margin-bottom: 160px; }
 
     .section-column {
       flex: 1;
@@ -395,80 +447,14 @@
           display: flex;
           align-items: center;
           gap: 8px;
-
-          .full-button {
-            cursor: pointer;
-            background-color: black;
-            color: var(--text-color);
-            border: 1px solid black;
-            border-radius: 4px;
-            padding: 2px 4px;
-            font-weight: 600;
-            font-size: 1rem;
-            transition: all .1s;
-
-            &.primary {
-              background-color: var(--primary-color);
-              color: var(--text-color);
-              border: 1px solid var(--primary-color);
-
-              &:hover {
-                transform: scale(1.06) rotate(1deg);
-              }
-            }
-
-            &.secondary {
-              background-color: var(--secondary-color);
-              color: var(--text-color);
-              border: 1px solid var(--secondary-color);
-
-              &:hover {
-                transform: scale(1.06) rotate(1deg);
-              }
-            }
-          }
-
-          .light-button {
-            cursor: pointer;
-            background-color: white;
-            color: black;
-            border: 1px solid black;
-            border-radius: 4px;
-            padding: 2px 4px;
-            font-weight: 400;
-            font-size: 1rem;
-            transition: all .1s;
-
-            &.primary {
-              background-color: transparent;
-              color: var(--primary-color);
-              border: 1px solid var(--primary-color);
-
-              &:hover {
-                background-color: var(--primary-color);
-                color: var(--text-color);
-                border: 1px solid var(--primary-color);
-                transform: scale(1.06) rotate(1deg);
-              }
-            }
-
-            &.secondary {
-              background-color: transparent;
-              color: var(--secondary-color);
-              border: 1px solid var(--secondary-color);
-
-              &:hover {
-                background-color: var(--secondary-color);
-                color: var(--text-color);
-                border: 1px solid var(--secondary-color);
-                transform: scale(1.06) rotate(1deg);
-              }
-            }
-          }
         }
       }
 
       .contact-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
         .buttons-container {
           display: flex;
           gap: 8px;
@@ -521,12 +507,73 @@
             }
           }
         }
+
+        .send-message-container {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .send-message-title {
+            color: var(--secondary-color);
+            font-size: 1.5rem;
+            font-weight: 600;
+
+            .indicator { font-weight: bold; }
+          }
+
+          .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .inputs-container {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 4px 16px;
+
+              .custom-input {
+                display: flex;
+                flex-direction: column;
+                width: 50%;
+
+                &:nth-child(1) { flex: 1; }
+                &:nth-child(2) { flex: 1; }
+                &:last-child { width: 100%; }
+
+                input { width: 100%; }
+                textarea {
+                  width: 100% !important;
+                  height: 130px;
+                  resize: vertical;
+                }
+
+                .custom-input-style {
+                  border: 0;
+                  outline: 0;
+                  border-radius: 4px;
+                  font-size: 1rem;
+                  padding: .25rem .5rem;
+                  margin: .5rem 0;
+                  transition: all ease-in-out .25s;
+                  background: color-mix(in srgb, var(--text-color) 10%, transparent);
+                }
+              }
+            }
+          }
+        }
       }
 
       .projects-container {
         display: flex;
         flex-direction: column;
         gap: 8px;
+
+        .repo-feedback-container {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          gap: 8px;
+        }
 
         .project-container {
           width: 100%;
@@ -621,11 +668,25 @@
     .section-container {
       flex-direction: column;
       gap: 8px;
+      &:last-child { margin-bottom: 40px; }
 
       .c {
         &-40 { width: 100%; max-width: 100%; }
         &-60 { width: 100%; max-width: 100%; }
       }
+    }
+
+    .submit-button { width: 100%; }
+  }
+
+  @media (max-width: 880px) {
+    .presentation { span { font-size: 6vw !important; } }
+    .middle-presentation {
+      .main-text { font-size: 10vw !important; }
+      .prefix { span {
+        font-size: 4vw !important;
+        line-height: 4vw !important;
+      } }
     }
   }
 

@@ -1,4 +1,3 @@
-import { isProxy, toRaw } from 'vue';
 import axios from 'axios';
 
 const default_url = 'https://api.github.com/';
