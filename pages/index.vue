@@ -540,11 +540,16 @@
                 &:nth-child(2) { flex: 1; }
                 &:last-child { width: 100%; }
 
-                input { width: 100%; }
+                input {
+                  width: 100%;
+                  color: var(--text-color);
+                }
+
                 textarea {
                   width: 100% !important;
                   height: 130px;
                   resize: vertical;
+                  color: var(--text-color);
                 }
 
                 .custom-input-style {
